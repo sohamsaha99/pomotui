@@ -12,6 +12,7 @@ from textual.widgets import (
         TabbedContent,
         TabPane,
         DataTable,
+        Digits,
         )
 from textual.screen import ModalScreen
 from textual.reactive import reactive
@@ -90,11 +91,8 @@ class SettingsModal(ModalScreen[Settings | None]):
 class TimerView(Static):
     """Main timer panel UI elements, no business logic."""
     phase_text = reactive("Work")
-    task_text = reactive("")
-    time_text = reactive("25:00")
-    start_text = reactive("--:--")
-    end_text = reactive("--:--")
-
+    tomato_count = reactive(0)
+    
     def compose(self) -> ComposeResult:
         yield Container(
                 Horizontal(
@@ -111,13 +109,33 @@ class TimerView(Static):
                         Pill("", id="count_pill"),
                         id="pills",
                         ),
-                    Center(Static("25:00", id="time_big")),
-                    ProgressBar(total=1500, show_eta=False, id="progress"),
+                    # New Main Display: Start | Grid | Time | End
                     Horizontal(
-                        Pill("Start: --:--", id="start_pill"),
-                        Pill("End: --:--", id="end_pill"),
-                        id="times_row",
+                        # Col 1: Start Time
+                        Vertical(
+                            Label("START", classes="time_label_header"),
+                            Label("--:--", id="start_time_display", classes="time_value"),
+                            classes="time_col left_col",
                         ),
+                        # Col 2: Tomato Grid
+                        Center(
+                            Static("", id="tomato_bar"), 
+                            classes="grid_col",
+                        ),
+                        # Col 3: Big Time
+                        Center(
+                            Digits("25:00", id="time_big"),
+                            classes="digits_col",
+                        ),
+                        # Col 4: End Time
+                        Vertical(
+                            Label("END", classes="time_label_header"),
+                            Label("--:--", id="end_time_display", classes="time_value"),
+                            classes="time_col right_col",
+                        ),
+                        id="timer_display_row",
+                    ),
+                    
                     Horizontal(
                         Button("−1m", id="minus_1m", variant="default"),
                         Button("+1m", id="plus_1m", variant="default"),
@@ -142,7 +160,7 @@ class TimerView(Static):
                 )
 
     def update_big_time(self, mmss: str) -> None:
-        self.query_one("#time_big", Static).update(mmss)
+        self.query_one("#time_big", Digits).update(mmss)
 
     def update_phase(self, text: str) -> None:
         self.query_one("#phase_pill", Pill).update(text)
@@ -151,13 +169,34 @@ class TimerView(Static):
         self.query_one("#count_pill", Pill).update(text)
 
     def update_start_end(self, start: str, end: str) -> None:
-        self.query_one("#start_pill", Pill).update(f"Start: {start}")
-        self.query_one("#end_pill", Pill).update(f"End: {end}")
+        # start and end are already formatted strings like "HH:MM:SS" or "--:--"
+        self.query_one("#start_time_display", Label).update(start)
+        self.query_one("#end_time_display", Label).update(end)
 
     def set_progress(self, value: int, total: int) -> None:
-        bar = self.query_one("#progress", ProgressBar)
-        bar.total = max(1, total)
-        bar.progress = max(0, min(value, bar.total))
+        # value = elapsed seconds, total = planned seconds
+        # 100 tomatoes in 10x10 grid
+        total = max(1, total)
+        percent = max(0, min(value / total, 1.0))
+        
+        total_tomatoes = 100
+        filled_count = int(percent * total_tomatoes)
+        
+        # Build grid string
+        # We need 10 lines, each with 10 chars/tomatoes + spaces
+        lines = []
+        for row in range(10):
+            line_chars = []
+            for col in range(10):
+                idx = row * 10 + col
+                if idx < filled_count:
+                    line_chars.append("🍅")
+                else:
+                    line_chars.append("🌱") # use seedling as placeholder for empty/growing
+            lines.append(" ".join(line_chars))
+            
+        final_str = "\n".join(lines)
+        self.query_one("#tomato_bar", Static).update(final_str)
 
     def set_primary_label(self, text: str) -> None:
         self.query_one("#primary", Button).label = text
