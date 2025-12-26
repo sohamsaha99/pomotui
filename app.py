@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, TabbedContent, TabPane, Button, Input
+from textual.widgets import Header, Footer, TabbedContent, TabPane, Button, Input, DataTable
 from textual.reactive import reactive
 
 from .models import Session, Phase, TimerState, HistoryItem, Settings
@@ -114,28 +114,41 @@ class PomodoroApp(App):
         if s.state == TimerState.RUNNING and s.end_at is not None:
             actual = planned - max(0, int((s.end_at - now).total_seconds()))
 
-        # history record
-        if s.start_at is None:
-            s.start_at = now
-        end_time = now
-        task = (s.task_name or "").strip()
-        if not task:
-            task = "—"
+        actual = max(0, actual)
 
-        self.history_index += 1
-        self.history.append(
-                HistoryItem(
-                    index=self.history_index,
-                    phase=s.current_phase.value,
-                    task=task,
-                    start=s.start_at,
-                    end=end_time,
-                    planned_seconds=planned,
-                    actual_seconds=max(0, actual),
-                    status=status,
-                    )
-                )
-        self._push_history_row(self.history[-1])
+        # Record history if conditions met
+        should_save = False
+        
+        if s.current_phase == Phase.WORK:
+            if actual >= 120:  # 2 minutes
+                should_save = True
+            else:
+                self.notify(f"Work session too short ({fmt_mmss(actual)}), not saved.", title="Session Skipped", severity="information")
+        else:
+            # BREAK phase: never save
+            should_save = False
+
+        if should_save:
+            if s.start_at is None:
+                s.start_at = now
+            end_time = now
+            task = (s.task_name or "").strip()
+            if not task:
+                task = "—"
+
+            self.history_index += 1
+            new_item = HistoryItem(
+                        index=self.history_index,
+                        phase=s.current_phase.value,
+                        task=task,
+                        start=s.start_at,
+                        end=end_time,
+                        planned_seconds=planned,
+                        actual_seconds=actual,
+                        status=status,
+                        )
+            self.history.append(new_item)
+            self._push_history_row(new_item)
 
         # Transition logic
         if s.current_phase == Phase.WORK:
@@ -309,6 +322,42 @@ class PomodoroApp(App):
         if bid == "plus_10s":
             self.action_add_10s()
             return
+
+    def on_data_table_cell_selected(self, event: DataTable.CellSelected) -> None:
+        table = self.query_one("#history_view", HistoryView).query_one("#history_table", DataTable)
+        # Check if the clicked column is the "Actions" column (last column)
+        # We know we added 9 columns, so index 8 is (0-8) -> 8 is Actions. 
+        # Or better, check the label if possible, but index is robust enough given we control it.
+        # Columns: #, Phase, Task, Start, End, Planned, Actual, Status, Actions
+        if event.coordinate.column == 8:
+            row_key = event.cell_key.row_key.value
+            # row_key was set to str(idx) in ui.py
+            
+            try:
+                idx_to_remove = int(row_key)
+            except ValueError:
+                return
+
+            # Find and remove from self.history
+            target = None
+            for item in self.history:
+                if item.index == idx_to_remove:
+                    target = item
+                    break
+            
+            if target:
+                self.history.remove(target)
+                save_data(self.session.settings, self.history)
+                
+                # Refresh table
+                table.clear()
+                # Re-add all items. 
+                # Note: We keep original indices to assume identity, or we could re-index?
+                # User didn't ask to re-index, so keeping original indices is safer for data consistency.
+                for item in self.history:
+                    self._push_history_row(item)
+                
+                self.notify("History item deleted.")
 
     # ----------------------------
     # Actions / keybinds

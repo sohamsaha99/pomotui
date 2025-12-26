@@ -111,6 +111,7 @@ class TimerView(Static):
                         Pill("End: --:--", id="end_pill"),
                         id="pills",
                         ),
+                    Static(classes="spacer"),
                     # New Main Display: Grid | Time
                     Horizontal(
                         # Col 2: Tomato Grid
@@ -126,6 +127,13 @@ class TimerView(Static):
                         id="timer_display_row",
                     ),
                     
+                    Static(classes="spacer"),
+
+                    Horizontal(
+                        Input(placeholder="What are you working on?", id="task_input"),
+                        id="task_row",
+                        ),
+                    Static(classes="spacer"),
                     Horizontal(
                         Button("−1m", id="minus_1m", variant="default"),
                         Button("+1m", id="plus_1m", variant="default"),
@@ -133,6 +141,7 @@ class TimerView(Static):
                         Button("+10s", id="plus_10s", variant="default"),
                         id="adjust_row",
                         ),
+                    Static(classes="spacer"),
                     Horizontal(
                         Button("Start", id="primary", variant="primary"),
                         Button("End", id="end", variant="error"),
@@ -140,11 +149,7 @@ class TimerView(Static):
                         Button("End Session", id="end_session", variant="error"),
                         id="buttons_row",
                         ),
-                    Horizontal(
-                        Label("Task (optional):", id="task_label"),
-                        Input(placeholder="What are you working on?", id="task_input"),
-                        id="task_row",
-                        ),
+
                     id="timer_panel",
                     ),
                 )
@@ -210,7 +215,7 @@ class HistoryView(Static):
     def setup_table(self) -> None:
         table = self.query_one("#history_table", DataTable)
         table.clear(columns=True)
-        table.add_columns("#", "Phase", "Task", "Start", "End", "Planned", "Actual", "Status")
+        table.add_columns("#", "Phase", "Task", "Start", "End", "Planned", "Actual", "Status", "Actions")
         table.zebra_stripes = True
 
     def add_item(
@@ -225,5 +230,5 @@ class HistoryView(Static):
             status: str,
             ) -> None:
         table = self.query_one("#history_table", DataTable)
-        table.add_row(str(idx), phase, task, start, end, planned, actual, status)
+        table.add_row(str(idx), phase, task, start, end, planned, actual, status, "❌", key=str(idx))
 

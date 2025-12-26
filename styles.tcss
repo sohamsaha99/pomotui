@@ -3,6 +3,11 @@ Screen {
     color: #e8eef5;
 }
 
+.spacer {
+    height: 1fr;
+    min-height: 0;
+}
+
 #topbar {
     height: 3;
     padding: 0 1;
@@ -27,10 +32,10 @@ Screen {
 }
 
 #pills {
-    height: 5;
+    height: 3;
     align: center middle;
     padding: 0;
-    margin-bottom: 1;
+    margin-bottom: 0;
 }
 
 Pill {
@@ -54,9 +59,9 @@ Pill {
 /* --- Main Timer Layout: Grid | Time --- */
 
 #timer_display_row {
-    height: 20;
+    height: 12;
     align: center middle;
-    margin-bottom: 1;
+    margin-bottom: 0;
     padding: 1;
 }
 
@@ -94,27 +99,25 @@ Pill {
 /* ---------------------------------------------------- */
 
 #adjust_row {
-    margin-top: 1;
+    margin-top: 0;
     height: 3;
     align: center middle;
 }
 
 #buttons_row {
-    margin-top: 1;
+    margin-top: 0;
     height: 3;
     align: left middle;
 }
 
 #task_row {
-    margin-top: 1;
+    margin-top: 0;
     height: 3;
-    align: left middle;
+    align: center middle;
 }
 
-#task_label {
-    width: 16;
-    content-align: left middle;
-    color: #a9b7c6;
+#task_input {
+    width: 50%;
 }
 
 Input {
