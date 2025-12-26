@@ -19,17 +19,17 @@ Ensure you have Python 3.10+ installed.
 2.  Install dependencies (it is recommended to use a virtual environment):
 
     ```bash
-    pip install textual
+    pip install -r requirements.txt
     ```
 
-    *(Note: Check `requirements.txt` if available, otherwise `textual` is the main dependency.)*
+    *(Note: Check `requirements.txt` for dependencies.)*
 
 ## Usage
 
 Run the application using Python:
 
 ```bash
-python app.py
+python -m pomotui
 ```
 
 ## Key Bindings
@@ -43,7 +43,7 @@ python app.py
 | `s` | Open Settings |
 | `+` / `-` | Add / Subtract 1 minute |
 | `]` / `[` | Add / Subtract 10 seconds |
-| `Ctrl+c` | Quit |
+| `Ctrl+q` | Quit |
 
 ## Configuration
 
