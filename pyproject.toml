@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pomotui"
+version = "0.1.0"
+description = "A premium, minimal Pomodoro TUI built with Textual."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Riddhiman Saha" }]
+dependencies = [
+  "textual>=0.60.0",
+]
+
+[project.scripts]
+pomotui = "pomotui.app:main"
+
+[tool.hatch.build]
+include = [
+  "pomotui/styles.tcss",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pomotui"]

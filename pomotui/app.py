@@ -434,6 +434,8 @@ class PomodoroApp(App):
         self._adjust_time(-10)
 
 
-if __name__ == "__main__":
+def main() -> None:
     PomodoroApp().run()
 
+if __name__ == "__main__":
+    main()

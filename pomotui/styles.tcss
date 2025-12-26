@@ -1,11 +1,12 @@
 Screen {
-    background: #0b0f14;
+    background: transparent;
     color: #e8eef5;
 }
 
 .spacer {
     height: 1fr;
     min-height: 0;
+    background: transparent;
 }
 
 #topbar {
