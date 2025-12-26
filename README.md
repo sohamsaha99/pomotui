@@ -1,6 +1,10 @@
 # Pomo
 
-A premium terminal-based Pomodoro timer built with [Textual](https://textual.textualize.io/).
+A terminal-based Pomodoro timer built with [Textual](https://textual.textualize.io/).
+
+
+https://github.com/user-attachments/assets/4ba8bd93-dc14-4612-80a8-d2f61d248229
+
 
 ## Features
 
