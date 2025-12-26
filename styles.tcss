@@ -27,20 +27,31 @@ Screen {
 }
 
 #pills {
-    height: 3;
-    align: left middle;
-    padding: 0 0 1 0;
+    height: 5;
+    align: center middle;
+    padding: 0;
+    margin-bottom: 1;
 }
 
 Pill {
     background: #121a24;
     border: round #1f2b3a;
     padding: 0 1;
-    margin-right: 1;
+    margin: 0 1;
+    text-style: bold;
+    content-align: center middle;
+    width: auto;
+    height: auto;
+}
+
+#phase_pill {
+    background: #3e4b59;
+    color: #ffffff;
+    min-width: 14;
     text-style: bold;
 }
 
-/* --- Main Timer Layout: Start | Grid | Time | End --- */
+/* --- Main Timer Layout: Grid | Time --- */
 
 #timer_display_row {
     height: 20;
@@ -49,34 +60,18 @@ Pill {
     padding: 1;
 }
 
-.time_col {
-    width: 16;
-    height: 100%;
-    align: center middle;
-}
-
-.left_col {
-    /* Optional specific styling for left column */
-    align: left middle;
-}
-
-.right_col {
-    /* Optional specific styling for right column */
-    align: right middle;
-}
-
 .grid_col {
     width: auto;
     height: 100%;
     align: center middle;
-    margin: 0 2;
+    margin: 0 1;
 }
 
 .digits_col {
     width: auto;
     height: 100%;
     align: center middle;
-    margin: 0 2;
+    margin: 0 1;
 }
 
 #tomato_bar {
@@ -94,17 +89,6 @@ Pill {
     min-width: 20;
     text-style: bold;
     content-align: center middle;
-}
-
-.time_label_header {
-    color: #5c6370;
-    text-style: bold;
-    margin-bottom: 1;
-}
-
-.time_value {
-    color: #e5c07b;
-    text-style: bold;
 }
 
 /* ---------------------------------------------------- */

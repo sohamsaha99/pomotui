@@ -105,18 +105,14 @@ class TimerView(Static):
                     ),
                 Vertical(
                     Horizontal(
+                        Pill("Start: --:--", id="start_pill"),
                         Pill("", id="phase_pill"),
                         Pill("", id="count_pill"),
+                        Pill("End: --:--", id="end_pill"),
                         id="pills",
                         ),
-                    # New Main Display: Start | Grid | Time | End
+                    # New Main Display: Grid | Time
                     Horizontal(
-                        # Col 1: Start Time
-                        Vertical(
-                            Label("START", classes="time_label_header"),
-                            Label("--:--", id="start_time_display", classes="time_value"),
-                            classes="time_col left_col",
-                        ),
                         # Col 2: Tomato Grid
                         Center(
                             Static("", id="tomato_bar"), 
@@ -126,12 +122,6 @@ class TimerView(Static):
                         Center(
                             Digits("25:00", id="time_big"),
                             classes="digits_col",
-                        ),
-                        # Col 4: End Time
-                        Vertical(
-                            Label("END", classes="time_label_header"),
-                            Label("--:--", id="end_time_display", classes="time_value"),
-                            classes="time_col right_col",
                         ),
                         id="timer_display_row",
                     ),
@@ -169,9 +159,8 @@ class TimerView(Static):
         self.query_one("#count_pill", Pill).update(text)
 
     def update_start_end(self, start: str, end: str) -> None:
-        # start and end are already formatted strings like "HH:MM:SS" or "--:--"
-        self.query_one("#start_time_display", Label).update(start)
-        self.query_one("#end_time_display", Label).update(end)
+        self.query_one("#start_pill", Pill).update(f"Start: {start}")
+        self.query_one("#end_pill", Pill).update(f"End: {end}")
 
     def set_progress(self, value: int, total: int) -> None:
         # value = elapsed seconds, total = planned seconds
