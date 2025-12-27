@@ -19,21 +19,47 @@ https://github.com/user-attachments/assets/4ba8bd93-dc14-4612-80a8-d2f61d248229
 
 Ensure you have Python 3.10+ installed.
 
-1.  Clone the repository.
-2.  Install dependencies (it is recommended to use a virtual environment):
+### Option 1: Using pipx (Recommended)
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+Run directly without cloning:
 
-    *(Note: Check `requirements.txt` for dependencies.)*
+```bash
+pipx install git+https://github.com/sohamsaha99/pomotui.git
+```
+
+### Option 2: Using uv
+
+If you use `uv`, you can install it as a tool:
+
+```bash
+uv tool install git+https://github.com/sohamsaha99/pomotui.git
+```
+
+### Option 3: Manual Install (Clone & virtualenv)
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sohamsaha99/pomotui.git
+   cd pomotui
+   ```
+
+2. Create and activate a virtual environment:
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+
+3. Install the package:
+   ```bash
+   pip install .
+   ```
 
 ## Usage
 
-Run the application using Python:
+Run the application:
 
 ```bash
-python -m pomotui
+pomotui
 ```
 
 ## Key Bindings
