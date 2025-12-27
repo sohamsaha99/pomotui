@@ -83,6 +83,13 @@ Press `s` to open the settings modal where you can configure:
 - Long break duration
 - Long break frequency
 
+## Data Storage
+
+The application stores your history and settings in a JSON file. The location depends on your operating system and `XDG_CONFIG_HOME` environment variable:
+
+- **Linux / macOS**: `~/.config/pomo/data.json`
+- **Windows**: `%USERPROFILE%\.config\pomo\data.json`
+
 ## License
 
 [MIT](LICENSE)
